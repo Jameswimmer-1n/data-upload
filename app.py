@@ -46,19 +46,8 @@ if uploaded_file:
             "Signed ICF", "Screen Failed", "Total Milestones",
             "Qual to Milestone Rate", "Cost per Milestone", "Total Spend"
         ],
-        
-"Value": [
-    filtered_df.shape[0],
-    filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0],
-    f"{filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0] / filtered_df.shape[0]:.2%}" if filtered_df.shape[0] > 0 else "0%",
-    "—",
-    "—",
-    filtered_df["Lead Stage History"].apply(lambda text: (
-        (lambda dates: start_date <= pd.to_datetime(dates[0], format="%m/%d/%y", errors="coerce") <= end_date
-         if dates and pd.notna(pd.to_datetime(dates[0], format="%m/%d/%y", errors='coerce')) else False)
-        (re.findall(r"Sent to Site: (\d{{2}}/\d{{2}}/\d{{2}})", str(text), flags=re.IGNORECASE))
-    )).sum(),
-
+        "Value": [
+        filtered_df.shape[0],
         filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0],
         f"{filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0] / filtered_df.shape[0]:.2%}" if filtered_df.shape[0] > 0 else "0%",
  "—", "—",
