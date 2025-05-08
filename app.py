@@ -50,6 +50,16 @@ if uploaded_file:
         filtered_df.shape[0],
         filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0],
         f"{filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0] / filtered_df.shape[0]:.2%}" if filtered_df.shape[0] > 0 else "0%",
+        "—",
+        "—",
+        filtered_df["Lead Stage History"].apply(lambda text: (
+            (lambda matches: (
+                pd.notna(second := (pd.to_datetime(matches[1], format="%m/%d/%y", errors="coerce")) if len(matches) > 1 else pd.NaT) and start_date <= second <= end_date
+            ))
+            (re.findall(r"Sent to Site: (\d{2}/\d{2}/\d{2})", str(text), flags=re.IGNORECASE))
+        )).sum(),
+        filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0],
+        f"{filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0] / filtered_df.shape[0]:.2%}" if filtered_df.shape[0] > 0 else "0%",
  "—", "—",
         "", "", "", "",
         "", "", "", "",
