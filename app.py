@@ -98,4 +98,4 @@ if uploaded_file:
         }
 
         summary_df = pd.DataFrame(summary_data)
-        st.table(summary_df)
+        st.dataframe(summary_df.set_index('Metric'), use_container_width=True)
