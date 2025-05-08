@@ -12,11 +12,12 @@ if uploaded_file:
 else:
     st.info("Please upload a file to begin.")
 
-# Date range filter
-st.sidebar.header("🔍 Filters")
-date_range = st.sidebar.date_input(
-    "Stage Date range",
-    [pd.to_datetime("today") - pd.Timedelta(days=6), pd.to_datetime("today")]
+# Date range filter with manual input enabled
+st.markdown("### 🔍 Filter by Date Range")
+date_range = st.date_input(
+    "Select a date range:",
+    [pd.to_datetime("today") - pd.Timedelta(days=6), pd.to_datetime("today")],
+    key="main_date_input"
 )
 
 # Display a 2-column, 15-row table
