@@ -17,7 +17,8 @@ if uploaded_file:
         df = pd.read_csv(uploaded_file)
         df['Submitted On'] = pd.to_datetime(df['Submitted On'], errors='coerce', dayfirst=True)
     else:
-        df = pd.read_excel(uploaded_file, parse_dates=['Submitted On'], dayfirst=True, errors='coerce')
+        df = pd.read_excel(uploaded_file)
+        df['Submitted On'] = pd.to_datetime(df['Submitted On'], errors='coerce', dayfirst=True)
 
     # Ensure required columns exist
     required_cols = ['Submitted On', 'UTM Source', 'Qualification Bucket', 'Lead Stage History']
