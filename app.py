@@ -14,21 +14,6 @@ if uploaded_file:
     # Date filter input
     st.markdown("### 🔍 Filter by Date Range")
     date_range = st.date_input(
-
-# Hidden date_filter_2 that uses first date AFTER the first "Sent to Site" date in Lead Stage History
-def get_date_after_first_sts(text):
-    import re
-    pattern = re.compile(r"Sent to Site: (\d{2}/\d{2}/\d{2})", re.IGNORECASE)
-    matches = re.findall(pattern, str(text))
-    if len(matches) > 1:
-        second_date = pd.to_datetime(matches[1], format="%m/%d/%y", errors="coerce")
-        return second_date
-    return pd.NaT
-
-df["Date After First StS"] = df["Lead Stage History"].apply(get_date_after_first_sts)
-date_filter_2 = [df["Date After First StS"].min(), df["Date After First StS"].max()]
-
-
         "Select a date range:",
         [pd.to_datetime("today") - pd.Timedelta(days=6), pd.to_datetime("today")],
         key="main_date_input"
@@ -63,6 +48,11 @@ date_filter_2 = [df["Date After First StS"].min(), df["Date After First StS"].ma
         ],
         "Value": [
         filtered_df.shape[0],
+        filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0],
+        f"{filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0] / filtered_df.shape[0]:.2%}" if filtered_df.shape[0] > 0 else "0%",
+        "—",
+        "—",
+        df["Lead Stage History"].str.contains("Sent to Site", case=False, na=False).sum(),
         filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0],
         f"{filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0] / filtered_df.shape[0]:.2%}" if filtered_df.shape[0] > 0 else "0%",
  "—", "—",
