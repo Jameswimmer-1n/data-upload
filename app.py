@@ -31,8 +31,14 @@ if uploaded_file:
 
         # Filters
         st.sidebar.header("🔍 Filters")
-        min_date = pd.to_datetime(df[['sent_to_site_date', 'appointment_scheduled_date', 'signed_icf_date']].min().min())
-        max_date = pd.to_datetime(df[['sent_to_site_date', 'appointment_scheduled_date', 'signed_icf_date']].max().max())
+        date_cols = ['sent_to_site_date', 'appointment_scheduled_date', 'signed_icf_date']
+        valid_dates = pd.concat([df[col].dropna() for col in date_cols])
+        if not valid_dates.empty:
+            min_date = valid_dates.min()
+            max_date = valid_dates.max()
+        else:
+            min_date = pd.to_datetime("2020-01-01")
+            max_date = pd.to_datetime("today")
         date_range = st.sidebar.date_input("Stage Date range", [min_date, max_date])
 
         utm_sources = df['UTM Source'].dropna().unique().tolist()
