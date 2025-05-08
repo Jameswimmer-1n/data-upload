@@ -43,7 +43,7 @@ if uploaded_file:
     data = {
         "Metric": [
         "Subs", "Quals"
-    ],
+    ]},
     "Value": [
         filtered_df.shape[0],
         filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0]
