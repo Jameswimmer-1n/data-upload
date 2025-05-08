@@ -42,7 +42,8 @@ if uploaded_file:
     # Table with filtered 'Subs' count and empty other metrics
     data = {
         "Metric": [
-        "Subs", "Quals"
+        "Subs",
+        "Quals"
     ],
     "Value": [
         filtered_df.shape[0],
