@@ -37,30 +37,53 @@ if uploaded_file:
         utm_sources = df['UTM Source'].dropna().unique().tolist()
         selected_sources = st.sidebar.multiselect("UTM Source", utm_sources, default=utm_sources)
 
-        # Filtered DataFrame
+        # Apply UTM Source filter
         df = df[df['UTM Source'].isin(selected_sources)]
         start_date, end_date = pd.to_datetime(date_range[0]), pd.to_datetime(date_range[1])
 
-        # Subs and Quals based on original submission
+        # KPI Calculations
         subs = len(df)
         quals_df = df[df['Qualification Bucket'].str.lower() != 'disqualified']
         quals = len(quals_df)
+        qual_rate = quals / subs if subs else 0
 
-        # Stage-specific filters using extracted transition dates
         sts = quals_df[(quals_df['sent_to_site_date'] >= start_date) & (quals_df['sent_to_site_date'] <= end_date)]
         appts = quals_df[(quals_df['appointment_scheduled_date'] >= start_date) & (quals_df['appointment_scheduled_date'] <= end_date)]
         signed_icf = quals_df[(quals_df['signed_icf_date'] >= start_date) & (quals_df['signed_icf_date'] <= end_date)]
         screenfails = quals_df['Lead Stage History'].str.contains('screenfailed', case=False, na=False).sum()
 
-        # Display KPI counts only
-        st.subheader("📊 Totals Summary")
-        st.write(f"**Subs:** {subs}")
-        st.write(f"**Quals:** {quals}")
-        st.write(f"**Sent to Site:** {len(sts)}")
-        st.write(f"**Appointments:** {len(appts)}")
-        st.write(f"**Signed ICF:** {len(signed_icf)}")
-        st.write(f"**Screenfails:** {screenfails}")
-        st.write(f"**Total Milestones (Signed ICF):** {len(signed_icf)}")
-        st.write(f"**Cost per Qual:** —")
-        st.write(f"**Cost per Milestone:** —")
-        st.write(f"**Total Spend:** —")
+        qual_to_sts = len(sts) / quals if quals else 0
+        qual_to_appt = len(appts) / quals if quals else 0
+        qual_to_milestone = len(signed_icf) / quals if quals else 0
+
+        # Display KPI Table
+        st.subheader("📋 KPI Summary Table")
+
+        summary_data = {
+            "Metric": [
+                "Subs", "Quals", "Qual Rate", "Cost", "CPQL",
+                "StS", "Qual-to-StS Rate", "Appts Total", "Qual-to-Appt Rate",
+                "Signed ICF", "Screen Failed", "Total Milestones",
+                "Qual-to-Milestone Rate", "Cost Per Milestone", "Total Spend"
+            ],
+            "Value": [
+                subs,
+                quals,
+                f"{qual_rate:.2%}",
+                "—",
+                "—",
+                len(sts),
+                f"{qual_to_sts:.2%}",
+                len(appts),
+                f"{qual_to_appt:.2%}",
+                len(signed_icf),
+                screenfails,
+                len(signed_icf),
+                f"{qual_to_milestone:.2%}",
+                "—",
+                "—"
+            ]
+        }
+
+        summary_df = pd.DataFrame(summary_data)
+        st.table(summary_df)
