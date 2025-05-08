@@ -49,7 +49,8 @@ if uploaded_file:
         "Value": [
         filtered_df.shape[0],
         filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0],
-        "", "—", "—",
+        f"{filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0] / filtered_df.shape[0]:.2%}" if filtered_df.shape[0] > 0 else "0%",
+ "—", "—",
         "", "", "", "",
         "", "", "", "",
         "—", "—"
