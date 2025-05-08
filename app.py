@@ -41,10 +41,7 @@ if uploaded_file:
             min_date = pd.to_datetime("2020-01-01")
             max_date = pd.to_datetime("today")
         
-date_range = st.sidebar.date_input(
-    "Stage Date range",
-    [pd.to_datetime("today") - pd.Timedelta(days=6), pd.to_datetime("today")]
-)
+date_range = st.sidebar.date_input("Stage Date range", [pd.to_datetime("today") - pd.Timedelta(days=6), pd.to_datetime("today")])
 
         utm_sources = df['UTM Source'].dropna().unique().tolist()
         selected_sources = st.sidebar.multiselect("UTM Source", utm_sources, default=utm_sources)
