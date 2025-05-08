@@ -99,17 +99,3 @@ if uploaded_file:
 
         summary_df = pd.DataFrame(summary_data)
         st.table(summary_df)
-
-        # Weekly summary for stage transitions
-        st.subheader("📅 Weekly Breakdown (Quals Only)")
-        stage_events = {
-            'Sent to Site': 'sent_to_site_date',
-            'Appointment Scheduled': 'appointment_scheduled_date',
-            'Signed ICF': 'signed_icf_date'
-        }
-
-        for label, date_col in stage_events.items():
-            st.markdown(f"**{label} by Week**")
-            weekly_counts = filtered_df[date_col].dropna().dt.to_period("W").value_counts().sort_index()
-            st.dataframe(weekly_counts.rename_axis("Week").reset_index(name="Count"))
-
