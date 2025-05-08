@@ -42,13 +42,13 @@ if uploaded_file:
     # Table with filtered 'Subs' count and empty other metrics
     data = {
         "Metric": [
-        "Subs",
-        "Quals"
-    ],
-    "Value": [
+            "Subs", "Quals", "Qual Rate", "Cost", "CPQL",
+            "StS", "Qual to StS Rate", "Appts Total", "Qual to Appt Rate",
+            "Signed ICF", "Screen Failed", "Total Milestones",
+            "Qual to Milestone Rate", "Cost per Milestone", "Total Spend"
+        ],
+        "Value": [
         filtered_df.shape[0],
-        filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0]
-    ],
         filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0],
         f"{filtered_df[filtered_df['Qualification Bucket'].str.lower() != 'disqualified'].shape[0] / filtered_df.shape[0]:.2%}" if filtered_df.shape[0] > 0 else "0%",
  "—", "—",
