@@ -79,22 +79,22 @@ if uploaded_file:
                 "Qual to Milestone Rate", "Cost per Milestone", "Total Spend"
             ],
             "Value": [
-                subs,
-                quals,
-                f"{qual_rate:.2%}",
-                "—",
-                "—",
-                sts_total,
-                f"{qual_to_sts:.2%}",
-                appts_total,
-                f"{qual_to_appt:.2%}",
-                signed_icf_total,
-                screenfail_total,
-                signed_icf_total,
-                f"{qual_to_milestone:.2%}",
-                "—",
-                "—"
-            ]
+        0,
+        0,
+        "0%",
+        "—",
+        "—",
+        0,
+        "0%",
+        0,
+        "0%",
+        0,
+        0,
+        0,
+        "0%",
+        "—",
+        "—"
+    ]
         }
 
         summary_df = pd.DataFrame(summary_data)
