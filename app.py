@@ -37,34 +37,33 @@ if uploaded_file:
         utm_sources = df['UTM Source'].dropna().unique().tolist()
         selected_sources = st.sidebar.multiselect("UTM Source", utm_sources, default=utm_sources)
 
-        # Apply UTM Source filter
+        # Apply filters
         df = df[df['UTM Source'].isin(selected_sources)]
         start_date, end_date = pd.to_datetime(date_range[0]), pd.to_datetime(date_range[1])
 
-        # KPI Calculations
+        # Compute values
         subs = len(df)
         quals_df = df[df['Qualification Bucket'].str.lower() != 'disqualified']
         quals = len(quals_df)
         qual_rate = quals / subs if subs else 0
 
-        sts = quals_df[(quals_df['sent_to_site_date'] >= start_date) & (quals_df['sent_to_site_date'] <= end_date)]
-        appts = quals_df[(quals_df['appointment_scheduled_date'] >= start_date) & (quals_df['appointment_scheduled_date'] <= end_date)]
-        signed_icf = quals_df[(quals_df['signed_icf_date'] >= start_date) & (quals_df['signed_icf_date'] <= end_date)]
-        screenfails = quals_df['Lead Stage History'].str.contains('screenfailed', case=False, na=False).sum()
+        sts_total = df['Lead Stage History'].str.contains('Sent to Site', case=False, na=False).sum()
+        qual_to_sts = sts_total / quals if quals else 0
 
-        qual_to_sts = len(sts) / quals if quals else 0
-        qual_to_appt = len(appts) / quals if quals else 0
-        qual_to_milestone = len(signed_icf) / quals if quals else 0
+        appts_total = df['Lead Stage History'].str.contains('Appointment Scheduled', case=False, na=False).sum()
+        qual_to_appt = appts_total / quals if quals else 0
 
-        # Display KPI Table
-        st.subheader("📋 KPI Summary Table")
+        signed_icf_total = df['Lead Stage History'].str.contains('Signed ICF', case=False, na=False).sum()
+        screenfail_total = df['Lead Stage History'].str.contains('screenfailed', case=False, na=False).sum()
+        qual_to_milestone = signed_icf_total / quals if quals else 0
 
+        # Summary Table
         summary_data = {
             "Metric": [
                 "Subs", "Quals", "Qual Rate", "Cost", "CPQL",
-                "StS", "Qual-to-StS Rate", "Appts Total", "Qual-to-Appt Rate",
+                "StS", "Qual to StS Rate", "Appts Total", "Qual to Appt Rate",
                 "Signed ICF", "Screen Failed", "Total Milestones",
-                "Qual-to-Milestone Rate", "Cost Per Milestone", "Total Spend"
+                "Qual to Milestone Rate", "Cost per Milestone", "Total Spend"
             ],
             "Value": [
                 subs,
@@ -72,13 +71,13 @@ if uploaded_file:
                 f"{qual_rate:.2%}",
                 "—",
                 "—",
-                len(sts),
+                sts_total,
                 f"{qual_to_sts:.2%}",
-                len(appts),
+                appts_total,
                 f"{qual_to_appt:.2%}",
-                len(signed_icf),
-                screenfails,
-                len(signed_icf),
+                signed_icf_total,
+                screenfail_total,
+                signed_icf_total,
                 f"{qual_to_milestone:.2%}",
                 "—",
                 "—"
