@@ -45,9 +45,14 @@ if uploaded_file:
         utm_sources = df['UTM Source'].dropna().unique().tolist()
         selected_sources = st.sidebar.multiselect("UTM Source", utm_sources, default=utm_sources)
 
-        # Apply filters
-        df = df[df['UTM Source'].isin(selected_sources)]
-        start_date, end_date = pd.to_datetime(date_range[0]), pd.to_datetime(date_range[1])
+        # Apply filters only if user sets them
+        if selected_sources:
+            df = df[df['UTM Source'].isin(selected_sources)]
+
+        if date_range:
+            start_date, end_date = pd.to_datetime(date_range[0]), pd.to_datetime(date_range[1])
+        else:
+            start_date, end_date = pd.to_datetime("2020-01-01"), pd.to_datetime("today")
 
         # Compute values
         subs = len(df)
