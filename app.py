@@ -14,7 +14,8 @@ uploaded_file = st.file_uploader("Upload an Excel or CSV file", type=["xlsx", "x
 if uploaded_file:
     # Read file
     if uploaded_file.name.endswith('.csv'):
-        df = pd.read_csv(uploaded_file, parse_dates=['Submitted On'], dayfirst=True, errors='coerce')
+        df = pd.read_csv(uploaded_file)
+        df['Submitted On'] = pd.to_datetime(df['Submitted On'], errors='coerce', dayfirst=True)
     else:
         df = pd.read_excel(uploaded_file, parse_dates=['Submitted On'], dayfirst=True, errors='coerce')
 
