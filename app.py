@@ -40,7 +40,7 @@ if uploaded_file:
     filtered_df = df[(df["first_stage_date"] >= start_date) & (df["first_stage_date"] <= end_date)]
 
     # Table with filtered 'Subs' count and empty other metrics
-    data = }
+    data = 
         "Metric": [
         "Subs", "Quals"
     ],
