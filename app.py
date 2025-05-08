@@ -14,8 +14,6 @@ if uploaded_file:
     # Date filter input
     st.markdown("### 🔍 Filter by Date Range")
     date_range = st.date_input(
-# Create date_filter_2 to mirror date_range
-date_filter_2 = date_range
 
         "Select a date range:",
         [pd.to_datetime("today") - pd.Timedelta(days=6), pd.to_datetime("today")],
