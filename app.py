@@ -52,35 +52,15 @@ if uploaded_file:
         signed_icf = quals_df[(quals_df['signed_icf_date'] >= start_date) & (quals_df['signed_icf_date'] <= end_date)]
         screenfails = quals_df['Lead Stage History'].str.contains('screenfailed', case=False, na=False).sum()
 
-        # Rates
-        qual_rate = quals / subs if subs else 0
-        qual_to_sts = len(sts) / quals if quals else 0
-        qual_to_appt = len(appts) / quals if quals else 0
-        qual_to_milestone = len(signed_icf) / quals if quals else 0
-
-        # Display metrics
-        st.subheader("📈 Metrics Summary")
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("Subs", subs)
-        col2.metric("Quals", quals)
-        col3.metric("Qual Rate", f"{qual_rate:.2%}")
-        col4.metric("Cost per Qual", "—")  # Placeholder
-
-        col5, col6, col7, col8 = st.columns(4)
-        col5.metric("Sent to Site", len(sts))
-        col6.metric("Qual-to-StS Rate", f"{qual_to_sts:.2%}")
-        col7.metric("Appointments", len(appts))
-        col8.metric("Qual-to-Appt Rate", f"{qual_to_appt:.2%}")
-
-        col9, col10, col11, col12 = st.columns(4)
-        col9.metric("Signed ICF", len(signed_icf))
-        col10.metric("Screenfails", screenfails)
-        col11.metric("Total Milestones", len(signed_icf))
-        col12.metric("Qual-to-Milestone Rate", f"{qual_to_milestone:.2%}")
-
-        st.markdown("**💰 Cost Per Milestone:** —  
-**💰 Total Spend:** —")
-
-        # Show filtered data preview
-        with st.expander("🔍 Preview Filtered Data"):
-            st.dataframe(df)
+        # Display KPI counts only
+        st.subheader("📊 Totals Summary")
+        st.write(f"**Subs:** {subs}")
+        st.write(f"**Quals:** {quals}")
+        st.write(f"**Sent to Site:** {len(sts)}")
+        st.write(f"**Appointments:** {len(appts)}")
+        st.write(f"**Signed ICF:** {len(signed_icf)}")
+        st.write(f"**Screenfails:** {screenfails}")
+        st.write(f"**Total Milestones (Signed ICF):** {len(signed_icf)}")
+        st.write(f"**Cost per Qual:** —")
+        st.write(f"**Cost per Milestone:** —")
+        st.write(f"**Total Spend:** —")
